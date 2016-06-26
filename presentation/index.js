@@ -100,26 +100,16 @@ export default class Presentation extends React.Component {
       <Spectacle theme={theme}>
         <Deck transition={["zoom", "slide"]} transitionDuration={500}>
           <Slide transition={["zoom"]} bgColor="background" >
-            <Heading size={1} fit caps lineHeight={1} textColor="rx">
-              Reactive UI
+            <Heading size={4} lineHeight={1} textColor="rx">
+              Reactive Programming With
             </Heading>
             <Heading size={1} fit caps textColor="rx">
-               With Rx and react
+               Reactive Extensions (RX)
             </Heading>
             <Link href="https://github.com/Yshayy/rx-react-meetup">
               <Text bold caps textColor="tertiary">View on Github</Text>
             </Link>
             <Text textColor="secondary" textSize="1.5em" margin="20px 0px 0px" bold>yshay@soluto.com</Text>
-          </Slide>
-          <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
-            <Heading size={2} caps textColor="secondary" textFont="primary">
-              Agenda
-            </Heading>
-            <List>
-              <ListItem>Introduction to Rx</ListItem>
-              <ListItem>Building React UI</ListItem>
-              <Appear><ListItem>All the code is available online</ListItem></Appear>
-            </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
             <Heading size={2} caps textColor="secondary" textFont="primary">
@@ -129,7 +119,6 @@ export default class Presentation extends React.Component {
               <ListItem>Tech lead at Soluto</ListItem>
               <Appear><ListItem>Enthusiastic Rx user for ~3 years</ListItem></Appear>
               <Appear><ListItem>Architecture, design, programming languages and building stuff</ListItem></Appear>
-              <Appear><ListItem>Currently playing Uncharted 4: A Thief's End</ListItem></Appear>
             </List>
           </Slide>
           <Slide transition={["slide"]} bgColor="background" notes="You can even put notes on your slide. How awesome is that?">
@@ -151,13 +140,13 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide>
           <Heading size={4} caps textColor="secondary" textFont="primary">
-              What?
+              What is Rx?
           </Heading>
           <iframe src="http://reactivex.io/" style={{width: "100%", height: 600}} />
           </Slide>
           <Slide>
           <Heading size={4} caps textColor="secondary" textFont="primary">
-              What?
+              What is Rx?
           </Heading>
           <List>
             <ListItem>"An API for asynchronous programming with observable streams" (reactivex.io)</ListItem>
@@ -270,15 +259,7 @@ export default class Presentation extends React.Component {
             </List>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading caps fit>Rx ecosystem in React</Heading>
-            <List>
-              <Appear><ListItem>Many libs and approaches</ListItem></Appear>
-              <Appear><ListItem>rx-recompose - build HOC with rx</ListItem></Appear>
-              <Appear><ListItem>react-cycle - mvi</ListItem></Appear>
-              <Appear><ListItem>react-combinators - use observables as props</ListItem></Appear>
-              <Appear><ListItem>flux implementations</ListItem></Appear>
-              <Appear><ListItem>Redux middleware</ListItem></Appear>
-            </List>
+            <Heading caps fit>More Examples</Heading>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading size={5} textColor="secondary" caps>React Example - Clock</Heading>
@@ -335,21 +316,14 @@ export default class Presentation extends React.Component {
               <Appear><ListItem>Rx has a steep learning curve</ListItem></Appear>
               <Appear><ListItem>Rx can sometime be too smart for it's own good</ListItem></Appear>
               <Appear><ListItem>Rx require a lot of commitment for a library</ListItem></Appear>
+              <Appear><ListItem>Debugging is non-trival</ListItem></Appear>
               <Appear><ListItem>Don't give up on Promises</ListItem></Appear>
               <Appear><ListItem>Don't settle with ugly Rx solutions</ListItem></Appear>
               <Appear><ListItem>Don't forget to dispose your subscriptions</ListItem></Appear>
             </List>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading>Soluto</Heading>
-            <List>
-              <Appear><ListItem>Help people enjoy technology</ListItem></Appear>
-              <Appear><ListItem>Support, knowledge, education, empowerment, insights, security</ListItem></Appear>
-              <Appear><ListItem>Run on multple platforms and devices</ListItem></Appear>
-              <Appear><ListItem>Scale of hundreds of millions</ListItem></Appear>
-              <Appear><ListItem>Organizing the first rx-israel meetup soon</ListItem></Appear>
-              <Appear><ListItem>And of course, We're hiring...</ListItem></Appear>
-            </List>
+            <Text textSize="1.5em" textColor="secondary" caps>26/6 - Rx-Israel first meetup here in Soluto </Text>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
             <Heading caps fit>Questions</Heading>

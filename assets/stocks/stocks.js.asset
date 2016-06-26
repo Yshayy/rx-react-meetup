@@ -76,7 +76,7 @@ function fetchLiveStockData(symbol){
 };
 
 let userStocksState = userStocks
-  .startWith("TLV:T25")
+  .startWith("INDEXVIE:ATX")
   .map(fetchLiveStockData)
   .mergeAll()
   .scan((stocks,update)=>(
