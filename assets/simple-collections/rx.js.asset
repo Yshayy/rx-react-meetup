@@ -12,6 +12,18 @@ collection.map(x=>x*2)
           .forEach( x => context.log(x));
 // [0..............6....8....10];
 ###
+context.log("hello");
+const collection = Observable.interval(1000).take(6);
+collection.map(x=>x*2).forEach( x => context.log(x));
+context.log("world");
+###
+context.log("hello");
+const collection = Observable.interval(1000).take(6);
+collection.map(x=>x*2)
+          .subscribe( x => context.log(x), 
+                      ex => {}, 
+                      () => context.log("world"));
+###
 const array = [0, 1, 2, 3, 4, 5];
 const collection = Observable.fromArray(array);
 collection.forEach( x => context.log(x));

@@ -8,4 +8,8 @@ const collection = [0, 1, 2, 3, 4, 5];
 collection.map(x=>x*2)
           .filter(x=>x>5)
           .forEach( x => context.log(x));
-
+###
+context.log("hello")
+const collection = [0, 1, 2, 3, 4, 5];
+collection.map(x=>x*2).forEach( x => context.log(x));
+context.log("world")

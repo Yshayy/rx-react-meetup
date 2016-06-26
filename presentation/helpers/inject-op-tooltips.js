@@ -15,7 +15,7 @@ const createToolTip = (id) => {
 };
 
 const rxImages =
-["map", "mergeAll", "interval", "Catch", "take", "just", "startWith", "debounce", "merge", "combineLatest", "scan", "reduce", "filter", "switch", "distinctUntilChanged", "flatMap"].reduce((acc, op) => ({[op.toLowerCase()]: `http://reactivex.io/documentation/operators/images/${op}.png`, ...acc } ), {});
+["map", "mergeAll", "tap", "repeat", "delaySubscription", "interval", "Catch", "take", "takeUntil", "just", "startWith", "debounce", "merge", "combineLatest", "scan", "reduce", "filter", "switch", "distinctUntilChanged", "flatMap"].reduce((acc, op) => ({[op.toLowerCase()]: `http://reactivex.io/documentation/operators/images/${op}.png`, ...acc } ), {});
 
 Rx.Observable.fromEvent(document.body, "mousemove")
              .distinctUntilChanged(e => e.target)

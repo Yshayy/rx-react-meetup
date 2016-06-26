@@ -60,10 +60,13 @@ const theme = createTheme({
   rx: "#dddddd"
 });
 
+const tradeSlides = require("raw!../assets/stocks/trade.js.asset").split("###");
+
+const addSomeRandomness = (x) => x + Math.round(Math.random() * 10) * 0.00001 * ((Math.random() > 0.5) ? 1 : -1);
+
 const RxImports = {Rx, Observable, Subject};
 const ReactImports = {React, ReactDOM, Component};
 const RecomposeImports = { createComponent, createEventHandler };
-const stockSources = require("raw!../assets/stocks/stocks.js.asset").split("###");
 const getTranslationUrl = (text) => `https://api-platform.systran.net/translation/text/translate?input=${text}&source=en&target=it&withSource=false&withAnnotations=false&backTranslation=false&encoding=utf-8&key=53db3c6e-55f4-4f0f-971c-ea17891d5d16`;
 const translateImports = {
   ...RxImports,
@@ -73,23 +76,18 @@ const translateImports = {
         .then((res) => res.outputs[0].output)),
   appendLine: (el, line) => el.textContent = line + "\n" + el.textContent
 };
-const stocksImports = {
+
+const tradeImports = {
   ...RxImports,
-  ...ReactImports,
-  WHITE: "#ffffff",
-  RED: "#ff0000",
-  GREEN: "#00ff00",
-  calculateDiff(oldStock, newStock) {
-    return (oldStock && oldStock.price) && Math.round( (
-    (newStock.price - oldStock.price) / newStock.price) * 1000000) * 0.0001;
-  },
+  formatCurrency(price) { return Math.round(price * 1000) / 1000;},
   fetchStockData(symbol) {
     const url = "http://cors.io/?u=" + encodeURIComponent(`http://finance.google.com/finance/info?client=ig&q=${symbol}`);
     const extractPrice = (txt) => parseFloat(JSON.parse(txt.substr(3))[0].l.replace(/,/g, ""));
     return Observable.fromPromise(() =>
       fetch(url)
       .then(res => res.text())
-      .then(txt => ({symbol, price:extractPrice(txt)}))
+      .then(txt => extractPrice(txt))
+      .then(addSomeRandomness)
     );
   }
 };
@@ -158,6 +156,9 @@ export default class Presentation extends React.Component {
             </List>
           </Slide>
           <Slide>
+            <Image src="http://images.cryhavok.org/d/13825-2/Wat.jpg" />
+          </Slide>
+          <Slide>
             <Heading fit caps textColor="secondary" textFont="primary">
                 Rx is all about collections!
             </Heading>
@@ -169,7 +170,17 @@ export default class Presentation extends React.Component {
               <ConsoleOutput/>
               </Runner>
               </div>
-            <Appear>
+          </Slide>
+          <Slide transition={["zoom", "fade"]} bgColor="primary" >
+            <Heading fit textColor="secondary">Introducing Observables</Heading>
+          </Slide>
+          <Slide transition={["zoom", "fade"]} bgColor="primary" >
+              <div>
+              <Heading size={6} textColor="secondary">Array - Collection over space (memory based)</Heading>
+              <Runner code={require("raw!../assets/simple-collections/array.js.asset").split("###")} maxLines={8} >
+              <ConsoleOutput/>
+              </Runner>
+              </div>
               <div>
               <Heading size={6} textColor="secondary">Observable - Collection over time (event based)</Heading>
               <Runner maxLines={8} code={require("raw!../assets/simple-collections/rx.js.asset").split("###")}
@@ -178,14 +189,14 @@ export default class Presentation extends React.Component {
               <ConsoleOutput/>
               </Runner>
               </div>
-            </Appear>
           </Slide>
           <Slide transition={["slide"]} bgDarken={0.75}>
-            <Text size={1} textColor="secondary" >
+            <Text caps size={1} textColor="secondary" >
                 If we look on Event streams as collections...
+                <br/>
              </Text>
              <Appear>
-             <Text textColor="secondary">
+             <Text margin={25} caps textColor="secondary">
                 We can use all our collection tools and knowledge to process events which lead us to...
              </Text>
              </Appear>
@@ -197,7 +208,7 @@ export default class Presentation extends React.Component {
           </Slide>
           <Slide transition={["slide"]} bgDarken={0.75}>
             <Text size={2} textColor="secondary" >
-                And that's the essence of RX and reactive programming/frp.
+                And that's the essence of RX and reactive programming/FRP
              </Text>
           </Slide>
           <Slide transition={["slide"]} bgDarken={0.75}>
@@ -207,6 +218,16 @@ export default class Presentation extends React.Component {
              <List>
              <ListItem>Event stream == Observable</ListItem>
              <ListItem>Operator - function that return observable from other observable like map, filter, etc...</ListItem>
+             </List>
+          </Slide>
+          <Slide transition={["slide"]} bgDarken={0.75}>
+            <Heading caps size={4} textColor="secondary" >
+                Observable can emit
+             </Heading>
+             <List>
+             <ListItem>Value event</ListItem>
+             <ListItem>Completion event</ListItem>
+             <ListItem>Error event</ListItem>
              </List>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
@@ -255,6 +276,7 @@ export default class Presentation extends React.Component {
             <Heading size={2} caps>Rx timeline</Heading>
             <List>
               <ListItem>Rx is a bit trending now but it's hardly new</ListItem>
+              <Appear><ListItem>Rx is backed by powerful players (Microsoft, Netflix, Google...)</ListItem></Appear>
               <Appear><ListItem>Expect Observables to be everywhere in js future</ListItem></Appear>
             </List>
           </Slide>
@@ -262,13 +284,28 @@ export default class Presentation extends React.Component {
             <Heading caps fit>More Examples</Heading>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading size={5} textColor="secondary" caps>React Example - Clock</Heading>
-            <Runner maxLines={20} code={require("raw!../assets/react/clock.js.asset").split("###")}
-              imports={{...RxImports, ...ReactImports,
-                getAppContainer: ({elems: {reactClockAppContainer}}) => reactClockAppContainer
+            <Heading size={5} textColor="secondary" caps>Drag Example</Heading>
+            <Runner maxLines={20} code={require("raw!../assets/drag/drag.js.asset").split("###")}
+              imports={{...RxImports,
+                moveTo(element, x, y) {
+                  document.body.appendChild(element);
+                  element.style.position = "fixed";
+                  element.style.left = x + "px";
+                  element.style.top = y + "px";
+                },
+                backToPosition: (element) => {
+                  const parent = element.parentNode;
+                  return () => {
+                    parent.appendChild(element);
+                    element.style.position = "static";
+                    element.style.left = 0;
+                    element.style.top = 0;
+                  };
+                },
+                getElement: ({elems: {draggable}}) => draggable
               }} >
               <DomOutput>
-                  <div id="reactClockAppContainer" ></div>
+                    <div id="draggable" style={{width: 50, height: 50, backgroundColor: "red"}} />
               </DomOutput>
            </Runner>
           </Slide>
@@ -279,24 +316,32 @@ export default class Presentation extends React.Component {
               </Runner>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading size={5} textColor="secondary" caps>React Example - Counter</Heading>
-            <Runner maxLines={20} code={require("raw!../assets/react/counter.js.asset").split("###")}
-              imports={{...RxImports, ...ReactImports, ...RecomposeImports,
-                getAppContainer: ({elems: {reactCounterAppContainer}}) => reactCounterAppContainer
-              }} >
+            <Heading size={5} textColor="secondary" caps>Scan - Counter Example</Heading>
+            <Runner maxLines={20} code={require("raw!../assets/scan/counter.js.asset").split("###")}
+              imports={{...RxImports,
+                getIncrementButton: ({elems: {inc}}) => inc,
+                getDecrementButton: ({elems: {dec}}) => dec,
+                getCounterView: ({elems: {counterView}}) => counterView
+              }}
+            >
               <DomOutput>
-                  <div id="reactCounterAppContainer" ></div>
+                  <div id="counterView">0</div>
+                  <button id="inc" >+</button>
+                  <button id="dec" >-</button>
               </DomOutput>
            </Runner>
           </Slide>
           <Slide transition={["zoom", "fade"]} bgColor="primary">
-            <Heading size={5} textColor="secondary" caps>React Example - Stocks</Heading>
-            <Runner maxLines={20} code={[stockSources[stockSources.length - 1], ...stockSources]}
-              imports={{...stocksImports,
-                getAppContainer: ({elems: {reactStocksAppContainer}}) => reactStocksAppContainer
-              }} >
+            <Heading size={5} textColor="secondary" caps>Bitcoin Converter</Heading>
+            <Runner maxLines={20} code={[...tradeSlides, tradeSlides[0]]}
+              imports={{...tradeImports,
+                getInputElement: ({elems: {btcInput}}) => btcInput,
+                getViewElement: ({elems: {ilsOutput}}) => ilsOutput
+              }}
+            >
               <DomOutput>
-                  <div id="reactStocksAppContainer" ></div>
+                  <input placeholder="Enter BTC amount" id="btcInput" ></input>
+                  <div id="ilsOutput" ></div>
               </DomOutput>
            </Runner>
           </Slide>

@@ -1,0 +1,34 @@
+let incrementButton = getIncrementButton(context);
+let decrementButton = getDecrementButton(context);
+let counterView = getCounterView(context);
+
+let increments = Rx.DOM.click(incrementButton)
+                        .map("INCREMENT")
+let decrements = Rx.DOM.click(decrementButton)
+                        .map("DECREMENT")
+
+var actions = Observable.merge(
+increments, decrements);
+
+actions.scan((state,action) => {
+    if (action === "INCREMENT") return state + 1;
+    if (action === "DECREMENT") return state - 1;
+  }, 0)
+  .subscribe(counter => 
+      counterView.textContent = counter);
+###
+
+let incrementButton = getIncrementButton(context);
+let decrementButton = getDecrementButton(context);
+let counterView = getCounterView(context);
+
+let incrementClicks = Rx.DOM.click(incrementButton)
+let decrementClicks = Rx.DOM.click(decrementButton)
+
+var changes = 
+Observable.merge(
+incrementClicks.map(x=>1), decrementClicks.map(x=> -1))
+
+changes.scan((acc,next) => acc + next, 0)
+  .subscribe(counter => 
+      counterView.textContent = counter);

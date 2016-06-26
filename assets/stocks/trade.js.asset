@@ -1,0 +1,51 @@
+let btcInput = getInputElement(context);
+let ilsOutput = getViewElement(context);
+
+function fetchLiveStockData(symbol){
+  return fetchStockData(symbol)
+    .delaySubscription(2000)
+    .repeat();
+};
+
+let btcToUsd$ = fetchLiveStockData("CURRENCY:BTCUSD")
+let usdToShekels$ = fetchLiveStockData("CURRENCY:USDILS")
+
+let amount$ = Rx.DOM
+              .keyup(btcInput)
+              .map(e=> e.target.value)
+              .filter(x=> x.length !=null)
+              .map(x=> parseFloat(x) || 0);
+
+Observable.combineLatest(
+btcToUsd$, usdToShekels$, amount$,
+(btcToUsd,usdToShekels,btcAmount)=> 
+      btcAmount * btcToUsd * usdToShekels
+)
+.map(x=> formatCurrency(x))
+.distinctUntilChanged()
+.subscribe(ilsPrice => 
+  ilsOutput.textContent = ilsPrice + "₪"); 
+
+###
+function fetchStockData(symbol){
+  symbol = symbol.toUpperCase();
+  let url = stockUrl(symbol);
+  return Observable.fromPromise(() =>
+    fetch(url)
+    .then(res => res.text())
+    .then(txt => ({symbol, price:extractPrice(txt)}))
+  ).map(addSomeRandomness);
+}
+###
+function fetchLiveStockData(symbol){
+  return Observable
+    .interval(2000)
+    .map(() => fetchStockData(symbol))
+    .switch();
+};
+###
+function fetchLiveStockData(symbol){
+  return fetchStockData(symbol)
+    .delaySubscription(2000)
+    .repeat();
+};
